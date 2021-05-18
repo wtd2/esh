@@ -50,3 +50,15 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# User
+.idea/
+.vscode/
+.DS_Store
+build/
+cmake-build-debug/
+CMakeFiles/
+Testing/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
