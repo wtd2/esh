@@ -11,10 +11,11 @@ int init_shell(struct s_esh *shell, const char *env[]) {
     /* init prompt. */
 
     /* init var. */
+    shell->var.is_a_tty = isatty(0);
 
     /* init env. */
 	shell->env.env = esh_cpy_arr(env);
-    shell->env.oldpwd = NULL;
+    // shell->env.oldpwd = NULL;
 
     /* success. */
     return 0;

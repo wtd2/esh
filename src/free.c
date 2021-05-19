@@ -3,7 +3,8 @@
 
 void free_shell(struct s_esh *shell) {
     /* show prompt. */
-    esh_print_str("exit\n", 1);
+    if (shell->var.is_a_tty)
+        esh_print_str("exit\n", 1);
     
     /* free prompt. */
 
@@ -11,5 +12,5 @@ void free_shell(struct s_esh *shell) {
 
     /* free env. */
 	esh_free_str_arr(&shell->env.env);
-    esh_free_str(&shell->env.oldpwd);
+    // esh_free_str(&shell->env.oldpwd);
 }

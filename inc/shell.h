@@ -11,12 +11,13 @@ struct s_prompt {
 
 struct s_var {
     bool exit;
+    bool is_a_tty;
     uint8_t return_value;
 };
 
 struct s_env {
     char **env;
-    char *oldpwd;
+    // char *oldpwd;
 };
 
 struct s_esh {
@@ -27,5 +28,8 @@ struct s_esh {
 
 int init_shell(struct s_esh *shell, const char *env[]);
 void free_shell(struct s_esh *shell);
+void loop_shell(struct s_esh *shell);
+int get_env_var_no(char **env, const char *name);
+char *get_env_var(char **env, const char *name);
 
 #endif
