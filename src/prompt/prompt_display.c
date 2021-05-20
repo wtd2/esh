@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-const int BUFFER_SIZE = 1024;
+#define BUFFER_SIZE 1024
 
 void prompt_display(struct s_esh *shell) {
     char* home_var = get_env_var(shell->env.env, "HOME");
@@ -16,7 +16,7 @@ void prompt_display(struct s_esh *shell) {
         strcat(prompt_str, username_var);
         strcat(prompt_str, "\e[0m:\e[34m");
         if (strstr(pwd_var, home_var) == pwd_var) {
-            strcat(prompt_str, "~");
+            strcat(prompt_str, "%~");
             strcat(prompt_str, &pwd_var[strlen(home_var)]);
         } else {
             strcat(prompt_str, pwd_var);
