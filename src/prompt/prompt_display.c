@@ -4,11 +4,13 @@
 
 #include <string.h>
 
+const int BUFFER_SIZE = 1024;
+
 void prompt_display(struct s_esh *shell) {
     char* home_var = get_env_var(shell->env.env, "HOME");
     char* username_var = get_env_var(shell->env.env, "LOGNAME");
     char* pwd_var = get_env_var(shell->env.env, "PWD");
-    char* prompt_str = strdup("");
+    char prompt_str[BUFFER_SIZE] = "";
     if (home_var != NULL && username_var != NULL && pwd_var != NULL) {
         strcat(prompt_str, "[\e[1;32m");
         strcat(prompt_str, username_var);
@@ -23,5 +25,4 @@ void prompt_display(struct s_esh *shell) {
     }
     strcat(prompt_str, "$ ");
     esh_print_str(prompt_str, 1);
-    esh_free_str(&prompt_str);
 }
