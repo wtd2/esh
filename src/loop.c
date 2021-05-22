@@ -2,18 +2,31 @@
 #include "shell.h"
 #include "prompt.h"
 
+#include <readline/readline.h>
+#include <readline/history.h>
+
+#define BUFFER_SIZE 128
+
+/*
+    Just assume is_a_tty is always true.
+*/
 void loop_shell(struct s_esh *shell) {
-    char* raw = NULL;
-    if (shell->var.is_a_tty)
-        prompt_display(shell);
-    int ret_value = prompt_input(shell, &raw);
-    if (ret_value != 0) {
-        if (ret_value == -1)
-            shell->var.return_value = 1;
-        shell->var.exit = 1;
-        esh_free_str(&raw);
-        return;
-    }
-    esh_println_str(raw, 1);
-    esh_free_str(&raw);
+    char* prompt_str = (char*)malloc(BUFFER_SIZE);
+    char* line;
+    
+    get_prompt_str(shell, prompt_str);
+    line = readline(prompt_str);
+    free(prompt_str);
+    
+    // if (ret_value != 0) {
+    //     if (ret_value == -1)
+    //         shell->var.return_value = 1;
+    //     shell->var.exit = 1;
+    //     esh_free_str(&raw);
+    //     return;
+    // }
+    
+    esh_println_str(line, 1);
+    add_history(line);
+    free(line);
 }
