@@ -27,7 +27,7 @@ int prompt_make_str(struct s_esh *shell, char *prompt_str){
         }
         strcat(prompt_str, "\e[0m]");
     }
-    return 0; //success
+    return 0; //if success
 }
 
 int prompt_input(struct s_esh *shell, char *line) {
@@ -43,5 +43,5 @@ int prompt_input(struct s_esh *shell, char *line) {
     }
     strcat(line, raw);
     esh_free_str(&raw);
-    return 0; //success
+    return 0; //if success
 }
