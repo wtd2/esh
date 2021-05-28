@@ -6,13 +6,13 @@
 using namespace std;
 
 Command* create_command(vector<char*> tokens) {
-    char *path = tokens[0];
-    char **argv = (char**)malloc(sizeof(char*) * (tokens.size()));
+    char *path = strdup(tokens[0]);
+    char **argv = (char**)malloc(sizeof(char*) * (tokens.size()+1));
     
-    for (int i=1; i<tokens.size(); ++i) {
-        argv[i-1] = tokens[i];
+    for (int i=0; i<tokens.size(); ++i) {
+        argv[i] = tokens[i];
     }
-    argv[tokens.size()-1] = NULL;
+    argv[tokens.size()] = NULL;
     
     return new Command(path, argv);
 }
