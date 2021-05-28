@@ -1,6 +1,5 @@
 #include "esh.h"
 #include "shell.h"
-#include "prompt.h"
 
 #define BUFFER_SIZE 1024
 

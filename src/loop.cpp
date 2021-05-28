@@ -1,7 +1,6 @@
 #include "esh.h"
 #include "exec.h"
 #include "shell.h"
-#include "prompt.h"
 #include "parse.h"
 
 #include <sys/types.h>
