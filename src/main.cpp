@@ -1,13 +1,18 @@
 #include "esh.h"
 #include "shell.h"
 
+#include <iostream>
+#include <string>
+#include <regex>
+
+using namespace std;
+
 int main(int argc, char *argv[], const char *env[]) {
-    struct s_esh shell;
-    if (init_shell(&shell, env) == 0) {
-        while (shell.var.exit == 0) {
-            loop_shell(&shell);
-        }
+    Shell shell(env);
+
+    while (shell.var.exit == 0) {
+        shell.loop_shell();
     }
-    free_shell(&shell);
+    
     return shell.var.return_value;
 }

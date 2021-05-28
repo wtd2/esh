@@ -5,10 +5,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <unordered_map>
 
-struct s_prompt {
-
-};
+using namespace std;
 
 struct s_var {
     bool exit;
@@ -21,15 +20,23 @@ struct s_env {
     // char *oldpwd;
 };
 
-struct s_esh {
-    struct s_prompt prompt;
-    struct s_var var;
-    struct s_env env;
-};
+class Shell {
+    public:
+        Shell(const char *env[]);
+        ~Shell();
 
-int init_shell(struct s_esh *shell, const char *env[]);
-void free_shell(struct s_esh *shell);
-void loop_shell(struct s_esh *shell);
+        struct s_var var;
+        struct s_env env;
+
+        void loop_shell();
+    
+    private:
+        unordered_map<string, const char*> path_of;
+
+        int prompt_input(char* line);
+        int prompt_make_str(char *prompt_str);
+};  
+
 int get_env_var_no(char **env, const char *name);
 char *get_env_var(char **env, const char *name);
 
