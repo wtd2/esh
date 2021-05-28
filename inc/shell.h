@@ -7,6 +7,9 @@
 #include <unistd.h>
 #include <unordered_map>
 
+#include <readline/readline.h>
+#include <readline/history.h>
+
 using namespace std;
 
 struct s_var {
