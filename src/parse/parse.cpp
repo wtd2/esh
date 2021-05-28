@@ -5,71 +5,45 @@
 
 using namespace std;
 
-int parse_token(char **p_str, char **token) {
-    char *str = *p_str;
-    // printf("parse *%s*\n", str);
-    if (is_sep(str[0])) {
-        char *sep = match_separator(str);
-        if (sep) {
-            (*token) = strdup(sep);
-            (*p_str) += strlen(sep);
-            return 1;
-        }else { // invalid sep
-            // do something
-        }
-    }
-
-    if (is_quote(str[0])) {
-        char *other = strchr(str+1, str[0]);
-        if (other) {
-            (*token) = strndup(str+1, other-str-1);
-            (*p_str) += other-str+1;
-        }else { // invliad quote
-            // do something
-        }
-    } else {
-        int p = strcspn(str, " \t\n;&|");
-        (*token) = strndup(str, p);
-        (*p_str) += p;
-    }
-
-    return 0;
-}
-
-Command create_command(vector<char*> tokens) {
+Command* create_command(vector<char*> tokens) {
     char *path = tokens[0];
-    char **argv = (char**)malloc(sizeof(char*) * (tokens.size()+1));
+    char **argv = (char**)malloc(sizeof(char*) * (tokens.size()));
     
     for (int i=1; i<tokens.size(); ++i) {
         argv[i-1] = tokens[i];
     }
-    argv[tokens.size()] = NULL;
+    argv[tokens.size()-1] = NULL;
     
-    return Command(path, argv);
+    return new Command(path, argv);
 }
 
-vector<Command> parse(char *line) {   
-    vector<Command> cmds;
-    vector<char*> tokens; // passed to commands, do not free here
+vector<Command*> parse(char *line) {   
+    vector<Command*> cmds;
+    vector<char*> tokens; // passed to commands, do not free here except that a parsing error occurs
     char* token; // this is produced by strdup which uses malloc, need to be freed
     char* str = line;
     
-    int n=0;
     do{
         int p=strspn(str, " ");
         if (p==strlen(str)) break;
         str += p;
-        if (parse_token(&str, &token)) {
+        int ret = parse_token(&str, &token);
+        if (ret==1) {// separator
             if (tokens.size()){
                 cmds.push_back(create_command(tokens));
                 tokens.clear();
             }
-        } else {
-            // printf("push token \"%s\"\n", token);
+        }else if (ret==0) {
             tokens.push_back(strdup(token));
+        }else{// error
+            esh_free_str(&token);
+            for (int i=0; i<tokens.size(); ++i) esh_free_str(&tokens[i]);//cleanup
+            tokens.clear();
+            esh_println_str("abort", 1);
+            break;
         }
         esh_free_str(&token);
-    } while (strlen(str)>0 && ++n<8);
+    } while (strlen(str)>0);
 
     if (tokens.size()) {
         cmds.push_back(create_command(tokens));

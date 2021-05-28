@@ -32,6 +32,7 @@ int prompt_input(struct s_esh *shell, char *line) {
 
     prompt_make_str(shell, prompt_str);
     raw = readline(prompt_str);
+    
     while (raw[strlen(raw)-1]=='\\') {
         strncat(line, raw, strlen(raw)-1);
         esh_free_str(&raw);
