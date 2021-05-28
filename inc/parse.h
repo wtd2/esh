@@ -10,7 +10,7 @@ using namespace std;
 vector<Command*> parse(char *line);
 
 // parsing utils
-char* match_separator(const char* str); // return NULL if no match
+const char* match_separator(const char* str); // return NULL if no match
 
 bool is_space(char c);
 bool is_quote(char c);

@@ -16,6 +16,9 @@ struct s_var {
 };
 
 struct s_env {
+    int stdin_fd;
+    int stdout_fd;
+    int stderr_fd;
     char **env;
     // char *oldpwd;
 };
@@ -29,7 +32,8 @@ class Shell {
         struct s_env env;
 
         void loop_shell();
-    
+        void reset_fd();
+        
     private:
         unordered_map<string, const char*> path_of;
 
