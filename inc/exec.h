@@ -11,6 +11,7 @@ class Command {
         char **argv;
 
         Command(char *path, char *argv[]);
+        ~Command();
 };  
 
 #endif
