@@ -53,7 +53,7 @@ void exec_builtin(struct s_esh *shell, char *cmd, char *pram[])
 	}
 	else if (!strcmp(cmd, "history") ) 
 	{
-		history();
+		// history();
 	}
 	else if (!strcmp(cmd, "exit") ) 
 	{

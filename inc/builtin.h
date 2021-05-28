@@ -11,6 +11,4 @@ void setenv(struct s_esh *shell, char *newenv);
 void unsetenv(struct s_esh *shell, char *oldenv);
 void resetenv(struct s_esh *shell, char *name, char *value);
 
-void esh_kill(pid_t pid);
-
-void exit(struct s_esh *shell);
+void esh_kill(pid_t pid)
