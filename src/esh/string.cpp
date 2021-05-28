@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 char** esh_cpy_arr(const char *const *arr) {
     size_t len = 0;
@@ -42,4 +43,15 @@ void esh_print_str(char const *s, int fd) {
 void esh_println_str(char const *s, int fd) {
     esh_print_str(s, fd);
     esh_print_str("\n", fd);
+    
 }
+
+void esh_println_str(int i, int fd) {
+    char *s;
+    sprintf(s, "%d", i);
+    esh_print_str(s, fd);
+    esh_print_str("\n", fd);
+    
+}
+
+

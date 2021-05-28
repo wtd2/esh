@@ -3,6 +3,7 @@
 #include "shell.h"
 #include "prompt.h"
 #include "parse.h"
+#include "builtin.h"
 
 #include <wait.h>
 #define BUFFER_SIZE 2048
@@ -19,19 +20,16 @@ void loop_shell(struct s_esh *shell) {
     vector<Command*> cmds = parse(line);
     
     for (int i=0; i<cmds.size(); ++i) {
-        printf("%s", cmds[i]->path);
-        for (int j=0; cmds[i]->argv[j]; j++) {
-            printf(", %s", cmds[i]->argv[j]);
-        }
-        printf("\n");
 
-        int pid = fork();
-        if (pid) {
-            wait(NULL);
-        }else{
-            execvpe(cmds[i]->path, cmds[i]->argv, shell->env.env);
+        if (is_builtin(cmds[i]->path)) {
+            exec_builtin(shell,cmds[i]->path,cmds[i]->argv);
+        } else {
+            int pid = fork();
+            if (pid) wait(NULL);
+            else execvpe(cmds[i]->path, cmds[i]->argv, shell->env.env);
         }
         
-        delete cmds[i];
+        
+        // delete cmds[i];
     }
 }
