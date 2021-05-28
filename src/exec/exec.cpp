@@ -20,7 +20,7 @@ Command::Command(
 }
 
 Command::~Command() {
-    printf("destruct cmd %s\n", path);
+    // printf("destruct cmd %s\n", path);
     esh_free_str(&path);
     esh_free_str_arr(&argv);
 }

@@ -3,6 +3,7 @@
 #include "shell.h"
 #include "prompt.h"
 #include "parse.h"
+#include "builtin.h"
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -60,7 +61,12 @@ void Shell::loop_shell() {
 	bool last_pipe= false;
 	int fd[2]={0,1};
     for (int i=0; i<cmds.size(); ++i) {
-		execute(cmds[i], &last_pipe, fd);
-		reset_fd();
-	}
+        if (is_builtin(cmds[i]->path)) {
+            exec_builtin(shell,cmds[i]->path,cmds[i]->argv);
+        } else {
+            execute(cmds[i], &last_pipe, fd);
+		        reset_fd();
+        }
+//         delete cmds[i];
+    }
 }
