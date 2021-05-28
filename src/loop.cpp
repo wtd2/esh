@@ -4,15 +4,45 @@
 #include "prompt.h"
 #include "parse.h"
 
-#include <wait.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 #define BUFFER_SIZE 2048
 
-void loop_shell(struct s_esh *shell) {
-    char line[BUFFER_SIZE] = "";
-    prompt_input(shell, line); // read input into line
-    add_history(line);
+char* command_generator (char *text, int state) {
+  printf("text=%s, state=%d\n", text, state);
+  if (state==0) { // init
 
-    // echo line
+  }
+  
+  return (char*) NULL;
+}
+
+char **completer (char *text, int start, int end)
+{
+  printf("text=%s, start=%d, end=%d\n", text, start, end);
+  char **matches;
+  esh_println_str(text, 1);
+  matches = (char **)NULL;
+
+  /* If this word is at the start of the line, then it is a command
+     to complete.  Otherwise it is the name of a file in the current
+     directory. */
+  if (start == 0)
+    matches = rl_completion_matches (text, (rl_compentry_func_t*)command_generator);
+
+  return (matches);
+}
+
+
+
+void Shell::loop_shell() {
+    char line[BUFFER_SIZE] = "";
+    prompt_input(line); // read input into line
+  
+    add_history(line);
+    
+    // // echo line
     esh_println_str(line, 1);
     
     // tokenize and parse line into commands
@@ -29,9 +59,8 @@ void loop_shell(struct s_esh *shell) {
         if (pid) {
             wait(NULL);
         }else{
-            execvpe(cmds[i]->path, cmds[i]->argv, shell->env.env);
+            execvpe(cmds[i]->path, cmds[i]->argv, env.env);
         }
-        
         delete cmds[i];
     }
 }
