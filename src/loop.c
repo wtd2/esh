@@ -1,4 +1,5 @@
 #include "esh.h"
+#include "exec.h"
 #include "shell.h"
 #include "prompt.h"
 
@@ -14,6 +15,8 @@ void loop_shell(struct s_esh *shell) {
         esh_free_str(&raw);
         return;
     }
-    esh_println_str(raw, 1);
+    
+    
+    
     esh_free_str(&raw);
 }
