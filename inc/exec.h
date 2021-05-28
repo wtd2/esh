@@ -10,7 +10,11 @@ class Command {
         char *path;
         char **argv;
 
-        Command(char *path, char *argv[]);
+        char *sep;
+        char *in_file;
+        char *out_file;
+
+        Command(char *path, char *argv[], char *sep, char *in_file, char *out_file);
         ~Command();
 };  
 
