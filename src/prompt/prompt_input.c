@@ -11,26 +11,6 @@
 */
 #define BUFFER_SIZE 1024
 
-// int prompt_input(struct s_esh *shell, char **raw) {
-    
-//     (*raw) = malloc(BUFFER_SIZE);
-//     read(0, (*raw), BUFFER_SIZE - 1);
-//     char *c = strchr((*raw), '\n');
-//     if (c != NULL) *c = 0;
-//     if (strcmp((*raw), "exit") == 0) {
-//         return 1;
-//     }
-
-//     /* success. */
-//     return 0;
-
-//     /* exit. */
-//     return 1;
-
-//     /* failed. */
-//     return -1;
-// }
-
 int prompt_make_str(struct s_esh *shell, char *prompt_str){
     char* home_var = get_env_var(shell->env.env, "HOME");
     char* username_var = get_env_var(shell->env.env, "LOGNAME");
