@@ -5,10 +5,6 @@
 #include <string.h>
 #include <unistd.h>
 
-/* 
-    this is a temporary function needs enhancement
-    may lead to memory leak
-*/
 #define BUFFER_SIZE 1024
 
 int prompt_make_str(struct s_esh *shell, char *prompt_str){
