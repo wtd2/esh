@@ -4,6 +4,7 @@
 #include "prompt.h"
 #include "parse.h"
 
+#include <wait.h>
 #define BUFFER_SIZE 2048
 
 void loop_shell(struct s_esh *shell) {
@@ -23,6 +24,14 @@ void loop_shell(struct s_esh *shell) {
             printf(", %s", cmds[i]->argv[j]);
         }
         printf("\n");
+
+        int pid = fork();
+        if (pid) {
+            wait(NULL);
+        }else{
+            execvpe(cmds[i]->path, cmds[i]->argv, shell->env.env);
+        }
+        
         delete cmds[i];
     }
 }
