@@ -12,13 +12,14 @@ int Shell::prompt_make_str(char *prompt_str){
         strcat(prompt_str, username_var);
         strcat(prompt_str, "\e[0m:\e[34m");
         if (strstr(pwd_var, home_var) == pwd_var) {
-            strcat(prompt_str, "%~");
+            strcat(prompt_str, "~");
             strcat(prompt_str, &pwd_var[strlen(home_var)]);
         } else {
             strcat(prompt_str, pwd_var);
         }
-        strcat(prompt_str, "\e[0m]");
-    }
+        strcat(prompt_str, "\e[0m] ");
+    } else
+        strcat(prompt_str, "$ ");
     return 0; //if success
 }
 

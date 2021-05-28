@@ -19,30 +19,19 @@ void Shell::setenv(char *newenv)
 {
     int len=0;
     while(env.env[len] != NULL) len++;
-    char** new_env = (char**)malloc(sizeof(char*) * (len + 2));
-    for (int i = 0; i < len; i++) {
-        new_env[i] = env.env[i];
-    }
-    strcpy(new_env[len], newenv);
-    env.env = new_env;
+    env.env = (char **)realloc(env.env, sizeof(char *) * (len + 1));
+    env.env[len] = strdup(newenv);
 }
 
 void Shell::unsetenv(char *name)
 {
     int len=0;
-    int c=0;
     while(env.env[len] != NULL) len++;
-    int id =get_env_var_no(env.env,name);
-    char** new_env = (char**)malloc(sizeof(char*) * (len));
-    for(int i=0;i<len;++i)
-    {
-        if(i!=id)
-        {
-            new_env[c]=env.env[i];
-            ++c;
-        }
-    }
-    env.env=new_env;
+    int id = get_env_var_no(env.env,name);
+    if (id == -1) return;
+    env.env[id] = env.env[len - 1];
+    esh_free_str(&env.env[len - 1]);
+    env.env[len - 1] = NULL;
 }
 
 void Shell::resetenv(char *name,char *value)
