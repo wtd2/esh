@@ -5,59 +5,59 @@
 #include <unistd.h>
 #include <stdio.h>
 
-void showenv(struct s_esh *shell)
+void Shell::showenv()
 {
     int len=0;
-    while(shell->env.env[len] != NULL) len++;
+    while(env.env[len] != NULL) len++;
     for(int i=0;i<len;++i)
     {
-        esh_println_str(shell->env.env[i],1);
+        esh_println_str(env.env[i],1);
     }
 }
 
-void setenv(struct s_esh *shell, char *newenv)
+void Shell::setenv(char *newenv)
 {
     int len=0;
-    while(shell->env.env[len] != NULL) len++;
+    while(env.env[len] != NULL) len++;
     char** new_env = (char**)malloc(sizeof(char*) * (len + 2));
     for (int i = 0; i < len; i++) {
-        new_env[i] = shell->env.env[i];
+        new_env[i] = env.env[i];
     }
     strcpy(new_env[len], newenv);
-    shell->env.env = new_env;
+    env.env = new_env;
 }
 
-void unsetenv(struct s_esh *shell, char *name)
+void Shell::unsetenv(char *name)
 {
     int len=0;
     int c=0;
-    while(shell->env.env[len] != NULL) len++;
-    int id =get_env_var_no(shell->env.env,name);
+    while(env.env[len] != NULL) len++;
+    int id =get_env_var_no(env.env,name);
     char** new_env = (char**)malloc(sizeof(char*) * (len));
     for(int i=0;i<len;++i)
     {
         if(i!=id)
         {
-            new_env[c]=shell->env.env[i];
+            new_env[c]=env.env[i];
             ++c;
         }
     }
-    shell->env.env=new_env;
+    env.env=new_env;
 }
 
-void resetenv(struct s_esh *shell, char *name,char *value)
+void Shell::resetenv(char *name,char *value)
 {
     int len=0;
-    while(shell->env.env[len] != NULL) len++;
-    int id =get_env_var_no(shell->env.env, name);
+    while(env.env[len] != NULL) len++;
+    int id =get_env_var_no(env.env, name);
     
     if (id == -1) {
         return;
     }
     // char** new_env = (char**)malloc(sizeof(char*) * (len+1));
-    shell->env.env[id] = strdup(name);
-    strcat(shell->env.env[id], "=");
-    strcat(shell->env.env[id], value);
+    env.env[id] = strdup(name);
+    strcat(env.env[id], "=");
+    strcat(env.env[id], value);
     // for(int i=0;i<len;++i)
     // {
     //     if(i!=id)s

@@ -5,7 +5,3 @@
 #include <unistd.h>
 #include <stdio.h>
 
-void exit(struct s_esh *shell)
-{
-    shell->var.exit=1;
-}

@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-void change_path(struct s_esh *shell, char *path)
+void Shell::change_path(char *path)
 {
 	char	*tmp_path;
 

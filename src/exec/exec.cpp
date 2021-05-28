@@ -4,6 +4,8 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <sys/wait.h>
 
 Command::Command(
     char *path, 
@@ -23,4 +25,60 @@ Command::~Command() {
     // printf("destruct cmd %s\n", path);
     esh_free_str(&path);
     esh_free_str_arr(&argv);
+}
+
+int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
+{
+	printf("%s, %s, %s, %s\n", cmd->path, cmd->in_file, cmd->out_file, cmd->sep);
+
+	if (cmd->in_file != NULL)
+	{ // redirect in from file
+		int fd_in = open(cmd->in_file, O_RDONLY);
+		if (fd_in == -1)
+		{
+			return -1;
+		}
+		dup2(fd_in, 0);
+	}
+	else if ((*last_pipe))
+		dup2(fd[0], 0); // redirect in from pipe
+
+	(*last_pipe) = false;
+	if (cmd->out_file != NULL)
+	{
+		printf("output to file\n");
+		int fd_out = open(cmd->out_file, O_RDWR | O_TRUNC);
+		if (fd_out == -1)
+			fd_out = open(cmd->out_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		dup2(fd_out, 1);
+		close(fd_out);
+	}
+	else if (cmd->sep && cmd->sep[0] == '|')
+	{
+		printf("use pipe\n");
+		pipe(fd);
+		dup2(fd[1], 1); // redirect out to pipe
+		close(fd[1]);
+		(*last_pipe) = true;
+	}
+	if (is_builtin(cmd->path))
+	{
+		exec_builtin(cmd->path, cmd->argv);
+	}
+	else
+	{
+		int pid = fork();
+		if (pid)
+		{
+			wait(NULL);
+		}
+		else
+		{
+			execvp(cmd->path, cmd->argv);
+		}
+	}
+
+	if (cmd->in_file)
+		close(0);
+	return 0;
 }
