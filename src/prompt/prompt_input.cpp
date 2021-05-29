@@ -45,6 +45,10 @@ int Shell::prompt_input(char *line) {
     char *raw;
     prompt_make_str(prompt_str);
     raw = readline(prompt_str);
+    if(raw == NULL) {
+        shell_exit();
+        return 0;
+    }
     // esh_println_str(raw, 1);
     while (raw[strlen(raw)-1]=='\\') {
         strncat(line, raw, strlen(raw)-1);
