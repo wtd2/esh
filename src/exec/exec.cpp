@@ -1,6 +1,7 @@
 #include "esh.h"
 #include "shell.h"
 #include "exec.h"
+#include "sig.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -65,6 +66,7 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		close(fd[1]);
 		(*last_pipe) = true;
 	}
+	signal(SIGINT, signal_running);
 	if (is_builtin(cmd->path))
 	{
 		exec_builtin(cmd->path, cmd->argv);
