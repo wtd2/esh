@@ -75,7 +75,7 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 	}
 	else if (cmd->sep && cmd->sep[0] == '|')
 	{
-		printf("use pipe\n");
+		// printf("use pipe\n");
 		pipe(fd);
 		dup2(fd[1], 1); // redirect out to pipe
 		close(fd[1]);
