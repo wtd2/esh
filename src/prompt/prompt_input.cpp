@@ -1,7 +1,22 @@
 #include "esh.h"
 #include "shell.h"
+#include "sig.h"
 
 #define BUFFER_SIZE 1024
+
+sigjmp_buf interupt_buf;
+
+void signal_shell(int sig)
+{
+    // sigjmp_buf interupt_buf;
+    if (sig == SIGINT)
+    {
+        esh_println_str("", 1);
+        // prompt_input(line);
+        // signal(SIGINT, signal_shell);
+        siglongjmp(interupt_buf, 1);
+    }
+}
 
 int Shell::prompt_make_str(char *prompt_str){
     char* home_var = get_env_var(env.env, "HOME");
@@ -24,12 +39,13 @@ int Shell::prompt_make_str(char *prompt_str){
 }
 
 int Shell::prompt_input(char *line) {
-    char prompt_str[BUFFER_SIZE]="";
-    char *raw;
 
+    sigsetjmp(interupt_buf, 1);
+    char prompt_str[BUFFER_SIZE] = "";
+    char *raw;
     prompt_make_str(prompt_str);
     raw = readline(prompt_str);
-    
+    // esh_println_str(raw, 1);
     while (raw[strlen(raw)-1]=='\\') {
         strncat(line, raw, strlen(raw)-1);
         esh_free_str(&raw);

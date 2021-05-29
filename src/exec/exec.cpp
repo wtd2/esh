@@ -31,6 +31,15 @@ Command::~Command() {
     esh_free_str_arr(&argv);
 }
 
+void signal_running(int sig)
+{
+	if (sig == SIGINT)
+	{
+		esh_println_str("", 1);
+		signal(SIGINT, signal_running);
+	}
+}
+
 int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 {
 	printf("%s, %s, %s, %s\n", cmd->path, cmd->in_file, cmd->out_file, cmd->sep);
