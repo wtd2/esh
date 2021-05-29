@@ -59,7 +59,7 @@ vector<Command*> Shell::parse(char *line) {
             esh_free_str(&in_file);
             esh_free_str(&out_file);
             esh_free_str(&error_file);
-        }else if (ret>=2){// redirect
+        }else if (ret>=2 && ret<=6){// redirect
             p=strspn(str, " ");
             if (p==strlen(str)) break;
             str += p;
@@ -73,8 +73,8 @@ vector<Command*> Shell::parse(char *line) {
                 append = ret%2==0;
             }
         }
-        else if (ret==0) {// argument
-            if(token[0]=='$'){
+        else if (ret==0 || ret==7) {// argument
+            if(token[0]=='$' && ret==0){
                 char *var = get_env_var(env.env, token+1);
                 if (var) {
                     args.push_back(strdup(var));
@@ -98,7 +98,7 @@ vector<Command*> Shell::parse(char *line) {
         }
         esh_free_str(&token);
     } while (strlen(str)>0);
-
+    
     if (args.size()) {
         cmds.push_back(create_command(args, NULL, in_file, out_file, error_file, append));
     }
