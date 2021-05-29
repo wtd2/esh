@@ -78,8 +78,10 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		}
 		else
 		{
-			if (execvpe(cmd->path, cmd->argv, env.env)==-1){
+			if (execvpe(cmd->path, cmd->argv, env.env)==-1) {
+				esh_print_str("esh: ", 2);
 				esh_println_str(strerror(errno), 2);
+				exit(EXIT_FAILURE);
 			}
 		}
 	}

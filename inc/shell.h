@@ -54,7 +54,7 @@ class Shell {
         void unsetenv(char *name);
         void resetenv(const char *name, char *value);
         void change_path(char *path);
-        void exit();
+        void shell_exit();
 };  
 
 int get_env_var_no(char **env, const char *name);

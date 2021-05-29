@@ -22,7 +22,7 @@ bool Shell::is_builtin(char *cmd)
 	// return !(strcmp(cmd, "cd") * strcmp(cmd, "setenv") * strcmp(cmd, "unsetenv") * strcmp(cmd, "resetenv") * strcmp(cmd, "env") * strcmp(cmd, "history") * strcmp(cmd, "exit"));
 }
 
-void Shell::exit()
+void Shell::shell_exit()
 {
 	this->var.exit = 1;
 }
@@ -71,6 +71,6 @@ void Shell::exec_builtin(char *cmd, char *pram[])
 	}
 	else if (!strcmp(cmd, "exit"))
 	{
-		exit();
+		shell_exit();
 	}
 }
