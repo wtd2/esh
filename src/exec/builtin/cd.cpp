@@ -14,16 +14,11 @@ void Shell::change_path(char *path)
 	{
 		esh_println_str(": No such file or directory.", 2);
 	}
-	tmp_path = getcwd(NULL, 1000);
+	tmp_path = getcwd(NULL, 0);
 
     
 	if (chdir(path) != 0)
 	{
 		esh_println_str(path, 2);
-	}
-	else
-	{
-		// ft_strdel(&tcsh->env.oldpwd);
-		// tcsh->env.oldpwd = tmp_path;
 	}
 }

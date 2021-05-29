@@ -11,7 +11,6 @@ void Shell::loop_shell() {
 	prompt_input(line); // read input into line
 
 	add_history(line);
-
 	// // echo line
 	esh_println_str(line, 1);
 

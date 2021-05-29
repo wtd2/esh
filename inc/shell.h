@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <string>
 #include "exec.h"
 #include <unordered_map>
 
@@ -51,7 +52,7 @@ class Shell {
         void showenv();
         void setenv(char *newenv);
         void unsetenv(char *name);
-        void resetenv(char *name, char *value);
+        void resetenv(const char *name, char *value);
         void change_path(char *path);
         void exit();
 };  
