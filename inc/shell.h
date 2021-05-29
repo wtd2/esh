@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <string>
 #include "exec.h"
 
 #include <readline/readline.h>
@@ -36,7 +37,8 @@ class Shell {
 
         void loop_shell();
         void reset_fd();
-        
+        const char *builtinList[8] = {"cd", "setenv", "unsetenv", "resetenv", "env", "history", "exit", NULL};
+
     private:
         vector<Command*> parse(char* line);
         int execute(Command *cmd, bool* last_pipe, int* fd);
@@ -50,7 +52,7 @@ class Shell {
         void showenv();
         void setenv(char *newenv);
         void unsetenv(char *name);
-        void resetenv(char *name, char *value);
+        void resetenv(const char *name, char *value);
         void change_path(char *path);
         void exit();
 };  

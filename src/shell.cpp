@@ -50,6 +50,9 @@ Shell::Shell(const char *env[]) {
     char *PATH = strdup(get_env_var((char**)env, "PATH"));
     char *rest = PATH;
     char *dir;
+    for (int i = 0; this->builtinList[i] != NULL; i++) {
+        path_of.push_back(string(this->builtinList[i]));
+    }
     while (1)
     {
         dir = strtok_r(rest, ":", &rest);
