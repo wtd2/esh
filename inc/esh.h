@@ -2,7 +2,7 @@
 #define ESH_H
 
 /* duplicate. */
-char** esh_cpy_arr(const char *const *arr);
+char **esh_cpy_arr(const char *const *arr);
 
 /* print. */
 void esh_print_str(char const *s, int fd);
