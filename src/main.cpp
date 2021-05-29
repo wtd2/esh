@@ -12,7 +12,7 @@ using namespace std;
 int main(int argc, char *argv[], const char *env[]) {
     Shell shell(env);
     read_history(NULL);
-
+    
     while (shell.var.exit == 0) {
         shell.loop_shell();
     }

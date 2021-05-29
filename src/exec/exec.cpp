@@ -12,13 +12,16 @@ Command::Command(
     char *argv[], 
     char *sep,
     char *in_file,
-    char *out_file) {
+    char *out_file,
+    char *error_file,
+    bool append) {
 
     this->path = path;
     this->argv = argv;
     this->sep = sep;
     this->in_file = in_file;
-    this->out_file = out_file;
+    this->out_file = out_file; this->append = append;
+    this->error_file = error_file;
 }
 
 Command::~Command() {
@@ -36,6 +39,7 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		int fd_in = open(cmd->in_file, O_RDONLY);
 		if (fd_in == -1)
 		{
+            esh_println_str("error: No such file or directory", 2);
 			return -1;
 		}
 		dup2(fd_in, 0);
@@ -46,8 +50,8 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 	(*last_pipe) = false;
 	if (cmd->out_file != NULL)
 	{
-		printf("output to file\n");
-		int fd_out = open(cmd->out_file, O_RDWR | O_TRUNC);
+		printf("output to file %s, append=%d\n", cmd->out_file, cmd->append);
+		int fd_out = open(cmd->out_file, O_RDWR | (cmd->append?O_APPEND:O_TRUNC));
 		if (fd_out == -1)
 			fd_out = open(cmd->out_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		dup2(fd_out, 1);
@@ -74,7 +78,7 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		}
 		else
 		{
-			execvp(cmd->path, cmd->argv);
+			execvpe(cmd->path, cmd->argv, env.env);
 		}
 	}
 
