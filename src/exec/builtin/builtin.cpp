@@ -7,14 +7,15 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-const char *builtinList[]={"cd","setenv","unsetenv","resetenv","env","history","exit"};
+
 
 
 
 bool Shell::is_builtin(char *cmd)
 {
-    for(int i=0;builtinList[i] != NULL;i++) {
-		if (!strcmp(cmd, builtinList[i]))
+	for (int i = 0; this->builtinList[i] != NULL; i++)
+	{
+		if (!strcmp(cmd, this->builtinList[i]))
 		return 1;
 	}
 	return 0;

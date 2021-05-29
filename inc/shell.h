@@ -38,9 +38,9 @@ class Shell {
 
         void loop_shell();
         void reset_fd();
-        
+        const char *builtinList[8] = {"cd", "setenv", "unsetenv", "resetenv", "env", "history", "exit", NULL};
+
     private:
-        unordered_map<string, const char*> path_of;
         int execute(Command *cmd, bool* last_pipe, int* fd);
 
         int prompt_input(char* line);
