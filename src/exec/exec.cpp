@@ -1,6 +1,7 @@
 #include "esh.h"
 #include "shell.h"
 #include "exec.h"
+#include "sig.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -28,6 +29,15 @@ Command::~Command() {
     // printf("destruct cmd %s\n", path);
     esh_free_str(&path);
     esh_free_str_arr(&argv);
+}
+
+void signal_running(int sig)
+{
+	if (sig == SIGINT)
+	{
+		esh_println_str("", 1);
+		signal(SIGINT, signal_running);
+	}
 }
 
 int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
@@ -71,6 +81,7 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		close(fd[1]);
 		(*last_pipe) = true;
 	}
+	signal(SIGINT, signal_running);
 	if (is_builtin(cmd->path))
 	{
 		exec_builtin(cmd->path, cmd->argv);

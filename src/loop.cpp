@@ -2,14 +2,16 @@
 #include "exec.h"
 #include "shell.h"
 #include "parse.h"
+#include "sig.h"
 
 #define BUFFER_SIZE 2048
 
 
 void Shell::loop_shell() {
+	
+	signal(SIGINT, signal_shell);
 	char line[BUFFER_SIZE] = "";
 	prompt_input(line); // read input into line
-
 	add_history(line);
 
 	// tokenize and parse line into commands
