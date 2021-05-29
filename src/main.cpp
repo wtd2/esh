@@ -10,6 +10,7 @@
 using namespace std;
 
 int main(int argc, char *argv[], const char *env[]) {
+
     Shell shell(env);
     read_history(NULL);
     

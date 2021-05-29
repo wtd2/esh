@@ -33,10 +33,6 @@ void Shell::exec_builtin(char *cmd, char *pram[])
 		resetenv("OLDPWD", getcwd(NULL, NULL)); //TODO
 		change_path(path);
 		resetenv("PWD", getcwd(NULL, NULL)); //TODO
-		esh_println_str(getcwd(NULL, NULL), 1);
-
-		chdir("/");
-		esh_println_str(getcwd(NULL, NULL), 1);
 	}
 	else if (!strcmp(cmd, "setenv"))
 	{

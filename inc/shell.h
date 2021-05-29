@@ -39,7 +39,6 @@ class Shell {
         void reset_fd();
         
     private:
-        unordered_map<string, const char*> path_of;
         int execute(Command *cmd, bool* last_pipe, int* fd);
 
         int prompt_input(char* line);
