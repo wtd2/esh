@@ -32,7 +32,14 @@ Command::~Command() {
 
 int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 {
-	printf("%s, %s, %s, %s\n", cmd->path, cmd->in_file, cmd->out_file, cmd->sep);
+	printf("%s, %s, %s, %s, %s\n", cmd->path, cmd->in_file, cmd->out_file, cmd->error_file, cmd->sep);
+	if (cmd->error_file) {
+		int fd_err = open(cmd->error_file, O_RDWR | (cmd->append?O_APPEND:O_TRUNC));
+		if (fd_err == -1)
+			fd_err = open(cmd->error_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		dup2(fd_err, 2);
+		close(fd_err);
+	}
 
 	if (cmd->in_file != NULL)
 	{ // redirect in from file
@@ -50,7 +57,6 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 	(*last_pipe) = false;
 	if (cmd->out_file != NULL)
 	{
-		printf("output to file %s, append=%d\n", cmd->out_file, cmd->append);
 		int fd_out = open(cmd->out_file, O_RDWR | (cmd->append?O_APPEND:O_TRUNC));
 		if (fd_out == -1)
 			fd_out = open(cmd->out_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -86,7 +92,5 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		}
 	}
 
-	if (cmd->in_file)
-		close(0);
 	return 0;
 }

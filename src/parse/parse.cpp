@@ -65,10 +65,12 @@ vector<Command*> Shell::parse(char *line) {
             str += p;
             parse_token(&str, &token);
             if (ret==2) in_file = strdup(token);
-            else {
+            else if (ret<=4){
                 out_file = strdup(token);
-                if (ret==3) append=false;
-                if (ret==4) append=true;
+                append = ret%2==0;
+            }else if (ret<=6){
+                error_file = strdup(token);
+                append = ret%2==0;
             }
         }
         else if (ret==0) {// argument

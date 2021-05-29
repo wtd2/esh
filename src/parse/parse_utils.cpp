@@ -4,11 +4,11 @@
 #include "parse.h"
 
 const char* separators[] = {
-    ";", "&&", "|", "<", "<<", ">", ">>", NULL
+    ";", "&&", "|", "<", "<<", ">", ">>", "2>", "2>>", NULL
 };
 
 const char* match_separator(const char* str) {
-    int sep_len = strspn(str, ";&|<>");
+    int sep_len = strspn(str, "2;&|<>");
     for (int i=0; separators[i]; ++i) {
         if (strncmp(str, separators[i], sep_len)==0 && sep_len==strlen(separators[i])){
             return separators[i];
@@ -47,15 +47,18 @@ int parse_token(char **p_str, char **token) {
             return -1;
         }
     }
-
-    if (is_redirect(str[0])) {
+    
+    if (is_redirect(str[0]) || str[0]=='2'&&is_redirect(str[1])) {
         const char *red = match_separator(str);
+        printf("matched = %s\n", red);
         if (red) {
             (*token) = strdup(red);
             (*p_str) += strlen(red);
             if (red=="<" || red=="<<") return 2;
             else if(red==">") return 3;
             else if(red==">>") return 4;
+            else if(red=="2>") return 5;
+            else if(red=="2>>") return 6;
         }else { // invalid red
             esh_println_str("error: invalid redirect", 2);
             return -1;
