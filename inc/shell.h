@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <unistd.h>
 #include "exec.h"
-#include <unordered_map>
 
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -39,6 +38,7 @@ class Shell {
         void reset_fd();
         
     private:
+        vector<Command*> parse(char* line);
         int execute(Command *cmd, bool* last_pipe, int* fd);
 
         int prompt_input(char* line);

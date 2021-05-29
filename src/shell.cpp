@@ -2,6 +2,7 @@
 #include "shell.h"
 
 #include <dirent.h>
+#include <string>
 #include <string.h>
 
 #include <readline/readline.h>

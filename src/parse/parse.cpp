@@ -32,7 +32,7 @@ Command* create_command(
         in_file, out_file, error_file, append);
 }
 
-vector<Command*> parse(char *line) {   
+vector<Command*> Shell::parse(char *line) {   
     vector<Command*> cmds;
 
     vector<char*> args; // passed to commands, do not free here except that a parsing error occurs
@@ -49,7 +49,7 @@ vector<Command*> parse(char *line) {
         if (p==strlen(str)) break;
         str += p;
         int ret = parse_token(&str, &token);
-        esh_println_str(token, 1);
+        // esh_println_str(token, 1);
         if (ret==1) {// separator
             cmds.push_back(
                 create_command(args, strdup(token), 
@@ -72,7 +72,20 @@ vector<Command*> parse(char *line) {
             }
         }
         else if (ret==0) {// argument
-            args.push_back(strdup(token));
+            if(token[0]=='$'){
+                char *var = get_env_var(env.env, token+1);
+                if (var) {
+                    args.push_back(strdup(var));
+                }
+            }else{
+                string str = string(token);
+                auto pos = str.find("~");
+                if (pos!=str.npos){
+                    string home = string(get_env_var(env.env, "HOME"));
+                    str = str.replace(pos, 1, home);
+                }
+                args.push_back(strdup(str.c_str()));
+            }
         }
         else{// error
             esh_free_str(&token);

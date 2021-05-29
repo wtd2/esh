@@ -12,9 +12,6 @@ void Shell::loop_shell() {
 
 	add_history(line);
 
-	// // echo line
-	esh_println_str(line, 1);
-
 	// tokenize and parse line into commands
 	vector<Command*> cmds = parse(line);
 	bool last_pipe= false;
