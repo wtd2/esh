@@ -42,7 +42,7 @@ void signal_running(int sig)
 
 int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 {
-	printf("%s, %s, %s, %s, %s\n", cmd->path, cmd->in_file, cmd->out_file, cmd->error_file, cmd->sep);
+	// printf("%s, %s, %s, %s, %s\n", cmd->path, cmd->in_file, cmd->out_file, cmd->error_file, cmd->sep);
 	if (cmd->error_file) {
 		int fd_err = open(cmd->error_file, O_RDWR | (cmd->append?O_APPEND:O_TRUNC));
 		if (fd_err == -1)

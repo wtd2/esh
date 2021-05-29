@@ -73,8 +73,8 @@ vector<Command*> Shell::parse(char *line) {
                 append = ret%2==0;
             }
         }
-        else if (ret==0 || ret==7) {// argument
-            if(token[0]=='$' && ret==0){
+        else if (ret==0 || ret==7 || ret==8) {// argument
+            if(token[0]=='$' && (ret==0 || ret==7)){
                 char *var = get_env_var(env.env, token+1);
                 if (var) {
                     args.push_back(strdup(var));

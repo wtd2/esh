@@ -70,7 +70,7 @@ int parse_token(char **p_str, char **token) {
         if (other) {
             (*token) = strndup(str+1, other-str-1);
             (*p_str) += other-str+1;
-            return 7;
+            return str[0]=='\''?7:8;
         }else { // invliad quote
             esh_println_str("error: unpaired quote", 2);
             return -1;
