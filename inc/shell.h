@@ -46,6 +46,7 @@ class Shell {
         int prompt_input(char* line);
         int prompt_make_str(char *prompt_str);
 
+        int  check(char *cmd, int aim, int real);
         bool is_builtin(char *cmd);
         void exec_builtin(char *cmd, char *pram[]);
 
