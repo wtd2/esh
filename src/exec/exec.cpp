@@ -78,7 +78,9 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
 		}
 		else
 		{
-			execvpe(cmd->path, cmd->argv, env.env);
+			if (execvpe(cmd->path, cmd->argv, env.env)==-1){
+				esh_println_str(strerror(errno), 2);
+			}
 		}
 	}
 
