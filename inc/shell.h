@@ -14,13 +14,15 @@
 
 using namespace std;
 
-struct s_var {
+struct s_var
+{
   bool exit;
   bool is_a_tty;
   uint8_t return_value;
 };
 
-struct s_env {
+struct s_env
+{
   int stdin_fd;
   int stdout_fd;
   int stderr_fd;
@@ -28,8 +30,9 @@ struct s_env {
   // char *oldpwd;
 };
 
-class Shell {
- public:
+class Shell
+{
+public:
   Shell(const char *env[]);
   ~Shell();
 
@@ -38,10 +41,10 @@ class Shell {
 
   void loop_shell();
   void reset_fd();
-  const char *builtinList[8] = {"cd",  "setenv",  "unsetenv", "resetenv",
-                                "env", "history", "exit",     NULL};
+  const char *builtinList[8] = {"cd", "setenv", "unsetenv", "resetenv",
+                                "env", "history", "exit", NULL};
 
- private:
+private:
   vector<Command *> parse(char *line);
   int execute(Command *cmd, bool *last_pipe, int *fd);
 

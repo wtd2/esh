@@ -3,14 +3,17 @@
 #include "parse.h"
 #include "shell.h"
 
-const char *separators[] = {";", "&&", "|",  "<",   "<<",
+const char *separators[] = {";", "&&", "|", "<", "<<",
                             ">", ">>", "2>", "2>>", NULL};
 
-const char *match_separator(const char *str) {
+const char *match_separator(const char *str)
+{
   int sep_len = strspn(str, "2;&|<>");
-  for (int i = 0; separators[i]; ++i) {
+  for (int i = 0; separators[i]; ++i)
+  {
     if (strncmp(str, separators[i], sep_len) == 0 &&
-        sep_len == strlen(separators[i])) {
+        sep_len == strlen(separators[i]))
+    {
       return separators[i];
     }
   }
@@ -25,25 +28,32 @@ bool is_sep(char c) { return c == ';' || c == '&' || c == '|'; }
 
 bool is_redirect(char c) { return c == '<' || c == '>'; }
 
-int parse_token(char **p_str, char **token) {
+int parse_token(char **p_str, char **token)
+{
   char *str = *p_str;
   // printf("parse *%s*\n", str);
-  if (is_sep(str[0])) {
+  if (is_sep(str[0]))
+  {
     const char *sep = match_separator(str);
-    if (sep) {
+    if (sep)
+    {
       (*token) = strdup(sep);
       (*p_str) += strlen(sep);
       return 1;
-    } else {  // invalid sep
+    }
+    else
+    { // invalid sep
       esh_println_str("error: invalid seperator", 2);
       return -1;
     }
   }
 
-  if (is_redirect(str[0]) || str[0] == '2' && is_redirect(str[1])) {
+  if (is_redirect(str[0]) || str[0] == '2' && is_redirect(str[1]))
+  {
     const char *red = match_separator(str);
 
-    if (red) {
+    if (red)
+    {
       (*token) = strdup(red);
       (*p_str) += strlen(red);
       if (red == "<" || red == "<<")
@@ -56,23 +66,31 @@ int parse_token(char **p_str, char **token) {
         return 5;
       else if (red == "2>>")
         return 6;
-    } else {  // invalid red
+    }
+    else
+    { // invalid red
       esh_println_str("error: invalid redirect", 2);
       return -1;
     }
   }
 
-  if (is_quote(str[0])) {
+  if (is_quote(str[0]))
+  {
     char *other = strchr(str + 1, str[0]);
-    if (other) {
+    if (other)
+    {
       (*token) = strndup(str + 1, other - str - 1);
       (*p_str) += other - str + 1;
       return str[0] == '\"' ? 7 : 8;
-    } else {  // invliad quote
+    }
+    else
+    { // invliad quote
       esh_println_str("error: unpaired quote", 2);
       return -1;
     }
-  } else {
+  }
+  else
+  {
     int p = strcspn(str, " \t\n;&|<>");
     (*token) = strndup(str, p);
     (*p_str) += p;

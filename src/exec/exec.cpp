@@ -8,7 +8,8 @@
 #include "sys/wait.h"
 
 Command::Command(char *path, char *argv[], char *sep, char *in_file,
-                 char *out_file, char *error_file, bool append) {
+                 char *out_file, char *error_file, bool append)
+{
   this->path = path;
   this->argv = argv;
   this->sep = sep;
@@ -18,20 +19,25 @@ Command::Command(char *path, char *argv[], char *sep, char *in_file,
   this->error_file = error_file;
 }
 
-Command::~Command() {
+Command::~Command()
+{
   esh_free_str(&path);
   esh_free_str_arr(&argv);
 }
 
-void signal_running(int sig) {
-  if (sig == SIGINT) {
+void signal_running(int sig)
+{
+  if (sig == SIGINT)
+  {
     esh_println_str("", 1);
     signal(SIGINT, signal_running);
   }
 }
 
-int Shell::execute(Command *cmd, bool *last_pipe, int *fd) {
-  if (cmd->error_file) {
+int Shell::execute(Command *cmd, bool *last_pipe, int *fd)
+{
+  if (cmd->error_file)
+  {
     int fd_err =
         open(cmd->error_file, O_RDWR | (cmd->append ? O_APPEND : O_TRUNC));
     if (fd_err == -1)
@@ -40,39 +46,52 @@ int Shell::execute(Command *cmd, bool *last_pipe, int *fd) {
     close(fd_err);
   }
 
-  if (cmd->in_file != NULL) {  // redirect in from file
+  if (cmd->in_file != NULL)
+  { // redirect in from file
     int fd_in = open(cmd->in_file, O_RDONLY);
-    if (fd_in == -1) {
+    if (fd_in == -1)
+    {
       esh_println_str("error: No such file or directory", 2);
       return -1;
     }
     dup2(fd_in, 0);
-  } else if ((*last_pipe))
-    dup2(fd[0], 0);  // redirect in from pipe
+  }
+  else if ((*last_pipe))
+    dup2(fd[0], 0); // redirect in from pipe
 
   (*last_pipe) = false;
-  if (cmd->out_file != NULL) {
+  if (cmd->out_file != NULL)
+  {
     int fd_out =
         open(cmd->out_file, O_RDWR | (cmd->append ? O_APPEND : O_TRUNC));
     if (fd_out == -1)
       fd_out = open(cmd->out_file, O_CREAT | O_RDWR | O_TRUNC, 0644);
     dup2(fd_out, 1);
     close(fd_out);
-  } else if (cmd->sep && cmd->sep[0] == '|') {
+  }
+  else if (cmd->sep && cmd->sep[0] == '|')
+  {
     pipe(fd);
-    dup2(fd[1], 1);  // redirect out to pipe
+    dup2(fd[1], 1); // redirect out to pipe
     close(fd[1]);
     (*last_pipe) = true;
   }
   signal(SIGINT, signal_running);
-  if (is_builtin(cmd->path)) {
+  if (is_builtin(cmd->path))
+  {
     exec_builtin(cmd->path, cmd->argv);
-  } else {
+  }
+  else
+  {
     int pid = fork();
-    if (pid) {
+    if (pid)
+    {
       wait(NULL);
-    } else {
-      if (execvpe(cmd->path, cmd->argv, env.env) == -1) {
+    }
+    else
+    {
+      if (execvpe(cmd->path, cmd->argv, env.env) == -1)
+      {
         esh_print_str("esh: ", 2);
         esh_println_str(strerror(errno), 2);
         exit(EXIT_FAILURE);
